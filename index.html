@@ -11,12 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/bootstrap.min.css">
-        <style>
-            body {
-                padding-top: 50px;
-                padding-bottom: 20px;
-            }
-        </style>
+
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/main.css">
 
@@ -31,11 +26,11 @@
         </div>
       </header>
 
-      <section>
+      <section class="quicktour-input">
         <div class="row">
           <div class="col-md-12">
             <div class="cloud animated fadeInUp">
-              <div class="login-container">
+              <div class="search-container">
                 <img src="img/comp_loc.png"
                 <div class="input-group">
                   <input type="text" class="form-control" placeholder="Explore...">
@@ -49,11 +44,16 @@
         </div>
       </section>
 
-      <section class="quicktour-map">
-        <div id="googleMap" style="width:500px;height:380px;"></div>
+      <section class="quicktour-map-container">
+        <div id="map" style="width:500px;height:380px;"></div>
       </section>
 
-      <section class="quicktour-cards">
+      <section class="quicktour-card-container">
+        <div class="container-fluid card-container">
+            <div class="row quicktour-cards">
+
+            </div>
+        </div>
       </section>
 
       <footer class="quicktour-footer">
@@ -65,7 +65,8 @@
       <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
       <script src="js/vendor/bootstrap.min.js"></script>
-      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwE_RA--Pi7ZoUKbZUzDo-9hfCJg5aaZM&libraries=places"></script>
+      <script src="js/vendor/async.js"></script>
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCpLj90EBJl2aBvriCwlhipzl5ftVo5pjg&libraries=places"></script>
 
       <script src="js/main.js"></script>
     </body>
