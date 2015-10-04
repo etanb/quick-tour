@@ -2,6 +2,38 @@
 	var map,
 	    service;
 
+
+/*
+
+=====notes from running your app locally====
+
+"bars in new york" had zero results
+
+"bars in florida" displayed movie theaters
+
+the app itself does not tell you anything about what it does
+
+attributes like "rating" have "undefined" displayed as text -- this should never be shown to the user
+
+nice transitions/animationg
+
+the card UI doesn't make a ton of sense — why obscure that information from a user until they click?
+
+you can only run one query then you have to click back
+
+
+====general note====
+
+think about naming everywhere, it seems like you might have declared & named a bunch of variables
+intending them to represent one concept but then drift occurred but you didn't rename them to
+represent their new status
+
+also you should be consistent with function names—-many people like them to be verb-based. you're inconsistent here
+
+consistent spacing and indenting is also super crucial in an exercise like this
+
+*/
+
 // Creates the static map of the world
 	function initMap() {
 	  map = new google.maps.Map(document.getElementById('map'), {
@@ -17,8 +49,9 @@
 		    query: query
 		  };
 		  service.textSearch(request, function(places, status) {
-		  	for (var key in places) 
-	          	{ 
+		  	for (var key in places)
+		  		// why newline here?
+	          	{
 	          		placesIDArray.push(places[key].place_id)
 	          	};
 	      	callback(null, places);
@@ -32,6 +65,7 @@
 			    placeId: place
 			  };
 			service.getDetails(request, function(place, status) {
+					// the console.log looks like an oversight
 			    console.log(status)
 			    if (status == google.maps.places.PlacesServiceStatus.OK) {
 			      placeDetails.push(place)
@@ -42,12 +76,13 @@
 		}, function(err) {
 		  if (err) {
 		    throw err;
+		    // you probably don't want to throw here, you should continue if you can
 		  }
 		  callback(null, placeDetails);
 		});
 	};
 
-// Renders messsage if there are no place detail results 
+// Renders messsage if there are no place detail results
 	function noPlaceDetails(cardContainer) {
 		var	template = "<div class='col-md-12 no-results'>" +
 		"<h1>Sorry, your query yielded no results.</h1>" +
@@ -58,7 +93,14 @@
 
 // Renders the 'cards' for each place detail
 	function renderPlaceDetailCard(results, detailsLength, cardContainer, cardColumn) {
+	// does `detailsLength` describe what the parameter actually represents and why is it a separate variable
+	// why pass in all of `results` if you're only going to use `results[1]`
 	// Used to dermine how many Bootstrap columns should be used based upon results length
+
+
+		// Why does this function only handle between 1-4 results?
+		// Read about the concept of coupling. This is very tight coupling.
+		// `renderPlaceDetailCard` should be able to handle any amount of results.
 		switch (detailsLength) {
 			case 1:
 				cardColumn = 12;
@@ -80,8 +122,9 @@
 			if ( data.photos === undefined ) {
 				photo = "img/no_image.png"
 			} else {
-				photo = data.photos[0].getUrl({'maxWidth': 350, 'maxHeight': 350}) 
+				photo = data.photos[0].getUrl({'maxWidth': 350, 'maxHeight': 350})
 			}
+
 			var	template = "<div class='col-md-" + cardColumn + "''>" +
 			"<div class='container'>" +
 			"<div data-lat=" + data.geometry.location.lat().toString() + " " + "data-lon=" + data.geometry.location.lng().toString() + " class='card'>" +
@@ -101,16 +144,20 @@
 			"</div>" +
 			"</div>" +
 			"</div>"
+			// ^ what's your spacing strategy here? Some lines are super short, some are very long
+			// also people don't like mixing html in with js, i would just use a seperate file
 
 			cardContainer.append(template)
-		}; 
+		};
 	};
 
+
 // If a user clicks a card, it changes the map position based upon longitude / latitude
+// ^ Cool but this should be done for the top result when a query is run, it looks broken otherwise
 	function cardClickMapMove() {
 		$('.card').click(function(){
 			  $(this).toggleClass('flipped');
-			  
+
 			  	var newLatLng = {lat: $(this).data("lat"), lng: $(this).data("lon")};
 
 		    var map = new google.maps.Map(document.getElementById('map'), {
@@ -127,11 +174,13 @@
 		});
 	};
 
-	$(".quicktour-search").click(function(){ 
+	$(".quicktour-search").click(function(){
 	 // Shows/hides elements upon load
 		$(".quicktour-input").hide("slow")
 		$(".quicktour-map-container, .quicktour-card-container").show("slow")
 		 	initMap();
+
+		 // `query` and `placesIDArray` don't belong in the same var declaration
 	 	var query = encodeURIComponent( $(".form-control").val() ),
 	 		placesIDArray = [];
 	// Using the Async JS library, does all the HTTP requests
@@ -142,6 +191,7 @@
 	 	    function(callback){
 	 	    	var placeDetails = [];
 	 	    	// Only need at most 4 results and also prevents hitting API rate limiting
+	 	    	// ^ where do you explain that you only need 4 results? why do you only need 4 results?
 	 	    	if ( placesIDArray.length > 4 ) {
 	 	    		placesIDArray = placesIDArray.slice(0,4)
 	 	    	};
@@ -153,7 +203,7 @@
 	 		var detailsLength = results[1].length,
 	 			cardContainer = $(".quicktour-cards"),
 	 			cardColumn;
-	 		
+
 	 		if (detailsLength === 0) {
 	 			noPlaceDetails(cardContainer);
 	 		} else {
@@ -163,6 +213,8 @@
 	 	});
 	});
 
+	// why have an icon that just reloads the page? i'd expect it to refresh results or something
+	// but this clears out the query too
 	$(".reload-icon").click( function() {
 		location.reload(true);
 	});
