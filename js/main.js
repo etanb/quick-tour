@@ -19,6 +19,8 @@ nice transitions/animationg
 
 the card UI doesn't make a ton of sense — why obscure that information from a user until they click?
 
+you can only run one query then you have to click back
+
 
 ====general note====
 
@@ -74,7 +76,7 @@ consistent spacing and indenting is also super crucial in an exercise like this
 		}, function(err) {
 		  if (err) {
 		    throw err;
-		    // this will crash your app, do you un
+		    // you probably don't want to throw here, you should continue if you can
 		  }
 		  callback(null, placeDetails);
 		});
